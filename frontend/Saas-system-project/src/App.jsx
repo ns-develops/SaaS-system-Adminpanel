@@ -17,6 +17,9 @@ import ManageUsers from "./pages/Admin/ManageUsers";
 
 /* Routes / Guards */
 import PrivateRoute from "./routes/PrivateRoute";
+import UserDashboard from "./pages/User/UserDashboard";
+import MyTask from "./pages/User/MyTask";
+import ViewTaskDetails from "./pages/User/ViewTaskDetails";
 
 const App = () => {
   return (
@@ -37,7 +40,9 @@ const App = () => {
 
         {/* User Routes */}
         <Route element={<PrivateRoute allowedRoles={["user"]} />}>
-          <Route path="/user/dashboard" element={<Dashboard />} />
+          <Route path="/user/dashboard" element={<UserDashboard />} />
+          <Route path="/user/tasks" element={<MyTask />} />
+          <Route path="/user/tasks-details/:id" element={<ViewTaskDetails />} />
         </Route>
 
       </Routes>
