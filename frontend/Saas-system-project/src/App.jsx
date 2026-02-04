@@ -21,22 +21,41 @@ import UserDashboard from "./pages/User/UserDashboard";
 import MyTask from "./pages/User/MyTask";
 import ViewTaskDetails from "./pages/User/ViewTaskDetails";
 
-/* Routes / Guards */
+/* Guards */
 import PrivateRoute from "./routes/PrivateRoute";
+
+/* Root redirect */
+const RootRedirect = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user.role === "admin") {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  if (user.role === "user") {
+    return <Navigate to="/user/dashboard" replace />;
+  }
+
+  return <Navigate to="/login" replace />;
+};
 
 const App = () => {
   return (
     <Router basename="/SaaS-system-Adminpanel">
       <Routes>
 
-        {/* Root */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        {/* App entry */}
+        <Route path="/" element={<RootRedirect />} />
 
-        {/* Public Routes */}
+        {/* Public */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
 
-        {/* Admin Routes */}
+        {/* Admin */}
         <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/tasks" element={<ManageTasks />} />
@@ -44,7 +63,7 @@ const App = () => {
           <Route path="/admin/users" element={<ManageUsers />} />
         </Route>
 
-        {/* User Routes */}
+        {/* User */}
         <Route element={<PrivateRoute allowedRoles={["user"]} />}>
           <Route path="/user/dashboard" element={<UserDashboard />} />
           <Route path="/user/tasks" element={<MyTask />} />
